@@ -127,7 +127,6 @@ public class MinefieldPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new Insets(-1, -1, -1, -1);
         jPanel1.add(jLabel9, gridBagConstraints);
 
-        setBorder(BorderFactory.createEtchedBorder());
         setLayout(new GridBagLayout());
     }// </editor-fold>//GEN-END:initComponents
 
