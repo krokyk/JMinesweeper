@@ -15,6 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.kroky.commons.utils.SwingUtils;
 
 /**
  *
@@ -22,21 +25,25 @@ import javax.swing.border.Border;
  */
 public class Tile extends JLabel {
 
+    private static final Logger LOG = LogManager.getFormatterLogger();
+
     private static final Border UNREVEALED_BORDER = BorderFactory.createBevelBorder(BevelBorder.RAISED);
     private static final Border REVEALED_BORDER = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 
     private final int posX;
     private final int posY;
-    private Tile northwestTile;
-    private Tile northTile;
-    private Tile northeastTile;
-    private Tile eastTile;
-    private Tile southeastTile;
-    private Tile southTile;
-    private Tile southwestTile;
-    private Tile westTile;
+//    private Tile northwestTile;
+//    private Tile northTile;
+//    private Tile northeastTile;
+//    private Tile eastTile;
+//    private Tile southeastTile;
+//    private Tile southTile;
+//    private Tile southwestTile;
+//    private Tile westTile;
     private final List<Tile> neighbours = new ArrayList<>();
     private boolean trapped = false;
+    private boolean revealed = false;
+    private boolean marked = false;
 
     public Tile(int x, int y) {
         this.posX = x;
@@ -46,36 +53,54 @@ public class Tile extends JLabel {
 
     private void init() {
         this.setBorder(UNREVEALED_BORDER);
-        this.setMaximumSize(new Dimension(20, 20));
-        this.setMinimumSize(new Dimension(20, 20));
-        this.setPreferredSize(new Dimension(20, 20));
+        this.setMaximumSize(new Dimension(24, 24));
+        this.setMinimumSize(new Dimension(24, 24));
+        this.setPreferredSize(new Dimension(24, 24));
         this.setHorizontalAlignment(SwingConstants.CENTER);
         this.setVerticalAlignment(SwingConstants.CENTER);
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                revealTile();
+                if (evt.getButton() == MouseEvent.BUTTON1) {
+                    revealTile();
+                } else {
+                    toggleFlag();
+                }
             }
-
         });
     }
 
     private void revealTile() {
-        if (isRevealed()) {
+        if (isRevealed() || isMarked()) {
             return;
         }
+        LOG.info("Revealing [%s,%s]", posX, posY);
+        this.setRevealed(true);
         this.setBorder(REVEALED_BORDER);
-        if (this.isTrapped()) {
-            //BOOM
-        } else {
-            this.setText("" + neighbours.stream().filter(t -> t.isTrapped()).count());
-        }
+        this.checkTile(this);
+    }
 
+    private void toggleFlag() {
+        this.setMarked(!isMarked());
+        this.setIcon(isMarked() ? SwingUtils.getIcon("/icons/flag.png", new Dimension(18, 18)) : null);
+    }
+
+    private void checkTile(Tile tile) {
+        if (tile.isTrapped()) {
+            tile.setText("*");
+        } else {
+            int surroundingMines = (int) tile.getNeighbours().stream().filter(t -> t.isTrapped()).count();
+            if (surroundingMines > 0) {
+                tile.setText("" + surroundingMines);
+            } else {
+                tile.getNeighbours().forEach(t -> t.revealTile());
+            }
+        }
     }
 
     public boolean addNeighbour(Tile tile) {
         if (tile != null) {
-            return neighbours.add(tile);
+            return getNeighbours().add(tile);
         }
         return false;
     }
@@ -95,122 +120,6 @@ public class Tile extends JLabel {
     }
 
     /**
-     * @return the northwestTile
-     */
-    public Tile getNorthwestTile() {
-        return northwestTile;
-    }
-
-    /**
-     * @param northwestTile the northwestTile to set
-     */
-    public void setNorthwestTile(Tile northwestTile) {
-        this.northwestTile = northwestTile;
-    }
-
-    /**
-     * @return the northTile
-     */
-    public Tile getNorthTile() {
-        return northTile;
-    }
-
-    /**
-     * @param northTile the northTile to set
-     */
-    public void setNorthTile(Tile northTile) {
-        this.northTile = northTile;
-    }
-
-    /**
-     * @return the northeastTile
-     */
-    public Tile getNortheastTile() {
-        return northeastTile;
-    }
-
-    /**
-     * @param northeastTile the northeastTile to set
-     */
-    public void setNortheastTile(Tile northeastTile) {
-        this.northeastTile = northeastTile;
-    }
-
-    /**
-     * @return the eastTile
-     */
-    public Tile getEastTile() {
-        return eastTile;
-    }
-
-    /**
-     * @param eastTile the eastTile to set
-     */
-    public void setEastTile(Tile eastTile) {
-        this.eastTile = eastTile;
-    }
-
-    /**
-     * @return the southeastTile
-     */
-    public Tile getSoutheastTile() {
-        return southeastTile;
-    }
-
-    /**
-     * @param southeastTile the southeastTile to set
-     */
-    public void setSoutheastTile(Tile southeastTile) {
-        this.southeastTile = southeastTile;
-    }
-
-    /**
-     * @return the southTile
-     */
-    public Tile getSouthTile() {
-        return southTile;
-    }
-
-    /**
-     * @param southTile the southTile to set
-     */
-    public void setSouthTile(Tile southTile) {
-        this.southTile = southTile;
-    }
-
-    /**
-     * @return the southwestTile
-     */
-    public Tile getSouthwestTile() {
-        return southwestTile;
-    }
-
-    /**
-     * @param southwestTile the southwestTile to set
-     */
-    public void setSouthwestTile(Tile southwestTile) {
-        this.southwestTile = southwestTile;
-    }
-
-    /**
-     * @return the westTile
-     */
-    public Tile getWestTile() {
-        return westTile;
-    }
-
-    /**
-     * @param westTile the westTile to set
-     */
-    public void setWestTile(Tile westTile) {
-        this.westTile = westTile;
-    }
-
-    private boolean isRevealed() {
-        return this.getBorder().equals(REVEALED_BORDER);
-    }
-
-    /**
      * @return the trapped
      */
     public boolean isTrapped() {
@@ -222,5 +131,40 @@ public class Tile extends JLabel {
      */
     public void setTrapped(boolean trapped) {
         this.trapped = trapped;
+    }
+
+    /**
+     * @return the revealed
+     */
+    public boolean isRevealed() {
+        return revealed;
+    }
+
+    /**
+     * @param revealed the revealed to set
+     */
+    public void setRevealed(boolean revealed) {
+        this.revealed = revealed;
+    }
+
+    /**
+     * @return the neighbours
+     */
+    public List<Tile> getNeighbours() {
+        return neighbours;
+    }
+
+    /**
+     * @return the marked
+     */
+    public boolean isMarked() {
+        return marked;
+    }
+
+    /**
+     * @param marked the marked to set
+     */
+    public void setMarked(boolean marked) {
+        this.marked = marked;
     }
 }

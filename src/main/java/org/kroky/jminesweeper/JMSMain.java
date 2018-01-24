@@ -9,8 +9,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
@@ -24,6 +22,7 @@ import javax.swing.LayoutStyle;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import org.kroky.commons.utils.SwingUtils;
 
 /**
  *
@@ -100,7 +99,7 @@ public class JMSMain extends javax.swing.JFrame {
 
         popSlider.setMaximum(99);
         popSlider.setMinimum(1);
-        popSlider.setValue(20);
+        popSlider.setValue(15);
         popSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent evt) {
                 popSliderStateChanged(evt);
@@ -148,37 +147,32 @@ public class JMSMain extends javax.swing.JFrame {
         jPanel6Layout.setHorizontalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                            .addGroup(GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ySlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(yLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-                                .addGap(60, 60, 60))
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(popLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(9, 9, 9))))
+                .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                            .addComponent(jLabel12)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGroup(GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                            .addComponent(jLabel9)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(ySlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(xSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(xSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(popLabel, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(yLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(xLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(xLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
+                        .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -261,7 +255,7 @@ public class JMSMain extends javax.swing.JFrame {
             minefieldContainer.removeAll();
             minefieldContainer.repaint();
         }
-        MinefieldPanel panel = new MinefieldPanel(xSlider.getValue(), ySlider.getValue());
+        MinefieldPanel panel = new MinefieldPanel(xSlider.getValue(), ySlider.getValue(), popSlider.getValue());
         minefieldContainer.add(Box.createHorizontalGlue());
         minefieldContainer.add(panel);
         minefieldContainer.add(Box.createHorizontalGlue());
@@ -325,12 +319,8 @@ public class JMSMain extends javax.swing.JFrame {
     private JSlider ySlider;
     // End of variables declaration//GEN-END:variables
 
-    private Map<JSlider, JLabel> sliders2labels = new HashMap<>();
-
     private void additionalInit() {
-        sliders2labels.put(xSlider, xLabel);
-        sliders2labels.put(ySlider, yLabel);
-        sliders2labels.put(popSlider, popLabel);
+        SwingUtils.centerOnScreen(this);
     }
 
     private void changeLabelValue(JLabel label, String value) {

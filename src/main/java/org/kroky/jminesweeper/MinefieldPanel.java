@@ -11,10 +11,16 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+import javafx.util.Pair;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -22,9 +28,11 @@ import javax.swing.border.BevelBorder;
  */
 public class MinefieldPanel extends javax.swing.JPanel {
 
-    MinefieldPanel(int xSize, int ySize) {
+    private static final Logger LOG = LogManager.getLogger();
+
+    MinefieldPanel(int xSize, int ySize, int minesPercent) {
         initComponents();
-        initMinefield(xSize, ySize);
+        initMinefield(xSize, ySize, minesPercent);
     }
 
     /**
@@ -147,9 +155,9 @@ public class MinefieldPanel extends javax.swing.JPanel {
     private JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
-    private void initMinefield(int xSize, int ySize) {
+    private void initMinefield(int xSize, int ySize, int minesPercent) {
         Tile[][] tiles = initTiles(xSize, ySize);
-        placeMinesToTiles(tiles);
+        placeMinesToTiles(tiles, minesPercent);
         placeTilesToPanel(tiles);
     }
 
@@ -201,8 +209,19 @@ public class MinefieldPanel extends javax.swing.JPanel {
         }
     }
 
-    private void placeMinesToTiles(Tile[][] tiles) {
-        //TODO
+    private void placeMinesToTiles(Tile[][] tiles, int minesPercent) {
+        final int xSize = tiles.length;
+        final int ySize = tiles[0].length;
+        int mineCount = (int) Math.round(xSize * ySize * (minesPercent / 100.0));
+        Random rand = new Random();
+        Set<Pair<Integer, Integer>> randomCoords = new HashSet<>();
+        while (randomCoords.size() < mineCount) {
+            int x = rand.nextInt(xSize);
+            int y = rand.nextInt(ySize);
+            Pair<Integer, Integer> coords = new Pair<>(x, y);
+            randomCoords.add(coords);
+        }
+        randomCoords.stream().forEach(coord -> tiles[coord.getKey()][coord.getValue()].setTrapped(true));
     }
 
     private void placeTilesToPanel(Tile[][] tiles) {
