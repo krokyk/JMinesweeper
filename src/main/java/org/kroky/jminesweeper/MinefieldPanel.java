@@ -6,6 +6,7 @@
 package org.kroky.jminesweeper;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -18,7 +19,6 @@ import javafx.util.Pair;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,11 +55,27 @@ public class MinefieldPanel extends javax.swing.JPanel {
         jLabel7 = new JLabel();
         jLabel8 = new JLabel();
         jLabel9 = new JLabel();
+        jLabel10 = new JLabel();
+        jLabel11 = new JLabel();
+        jLabel12 = new JLabel();
+        jLabel13 = new JLabel();
+        jLabel14 = new JLabel();
+        jLabel15 = new JLabel();
+        jLabel16 = new JLabel();
+        jLabel25 = new JLabel();
+        jLabel26 = new JLabel();
+        jLabel27 = new JLabel();
+        jLabel28 = new JLabel();
+        jLabel29 = new JLabel();
+        jLabel30 = new JLabel();
+        jLabel31 = new JLabel();
+        jLabel32 = new JLabel();
+        jLabel17 = new JLabel();
 
         jPanel1.setLayout(new GridBagLayout());
 
-        jLabel1.setText("jLabel1");
-        jLabel1.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+        jLabel1.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel1.setPreferredSize(new Dimension(24, 24));
         jLabel1.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
                 jLabel1MouseClicked(evt);
@@ -68,72 +84,197 @@ public class MinefieldPanel extends javax.swing.JPanel {
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new Insets(-1, -1, -1, -1);
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        jLabel2.setText("jLabel2");
         jLabel2.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel2.setPreferredSize(new Dimension(24, 24));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new Insets(-1, -1, -1, -1);
+        gridBagConstraints.insets = new Insets(0, -1, 0, 0);
         jPanel1.add(jLabel2, gridBagConstraints);
 
-        jLabel3.setText("jLabel3");
         jLabel3.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel3.setPreferredSize(new Dimension(24, 24));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new Insets(-1, -1, -1, -1);
+        gridBagConstraints.insets = new Insets(0, -1, 0, 0);
         jPanel1.add(jLabel3, gridBagConstraints);
 
-        jLabel4.setText("jLabel4");
         jLabel4.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel4.setPreferredSize(new Dimension(24, 24));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(-1, -1, -1, -1);
+        gridBagConstraints.insets = new Insets(-1, 0, 0, 0);
         jPanel1.add(jLabel4, gridBagConstraints);
 
-        jLabel5.setText("jLabel5");
         jLabel5.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel5.setPreferredSize(new Dimension(24, 24));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(-1, -1, -1, -1);
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
         jPanel1.add(jLabel5, gridBagConstraints);
 
-        jLabel6.setText("jLabel6");
         jLabel6.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel6.setPreferredSize(new Dimension(24, 24));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(-1, -1, -1, -1);
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
         jPanel1.add(jLabel6, gridBagConstraints);
 
-        jLabel7.setText("jLabel6");
-        jLabel7.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+        jLabel7.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel7.setPreferredSize(new Dimension(24, 24));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new Insets(-1, -1, -1, -1);
+        gridBagConstraints.insets = new Insets(-1, 0, 0, 0);
         jPanel1.add(jLabel7, gridBagConstraints);
 
-        jLabel8.setText("jLabel6");
         jLabel8.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel8.setPreferredSize(new Dimension(24, 24));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new Insets(-1, -1, -1, -1);
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
         jPanel1.add(jLabel8, gridBagConstraints);
 
-        jLabel9.setText("jLabel6");
-        jLabel9.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+        jLabel9.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel9.setPreferredSize(new Dimension(24, 24));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.insets = new Insets(-1, -1, -1, -1);
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
         jPanel1.add(jLabel9, gridBagConstraints);
+
+        jLabel10.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel10.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new Insets(0, -1, 0, 0);
+        jPanel1.add(jLabel10, gridBagConstraints);
+
+        jLabel11.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel11.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel11, gridBagConstraints);
+
+        jLabel12.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel12.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel12, gridBagConstraints);
+
+        jLabel13.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel13.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new Insets(-1, 0, 0, 0);
+        jPanel1.add(jLabel13, gridBagConstraints);
+
+        jLabel14.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel14.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel14, gridBagConstraints);
+
+        jLabel15.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel15.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel15, gridBagConstraints);
+
+        jLabel16.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel16.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel16, gridBagConstraints);
+
+        jLabel25.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel25.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.insets = new Insets(0, -1, 0, 0);
+        jPanel1.add(jLabel25, gridBagConstraints);
+
+        jLabel26.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel26.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel26, gridBagConstraints);
+
+        jLabel27.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel27.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel27, gridBagConstraints);
+
+        jLabel28.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel28.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel28, gridBagConstraints);
+
+        jLabel29.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel29.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new Insets(-1, 0, 0, 0);
+        jPanel1.add(jLabel29, gridBagConstraints);
+
+        jLabel30.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel30.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel30, gridBagConstraints);
+
+        jLabel31.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel31.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel31, gridBagConstraints);
+
+        jLabel32.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel32.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel32, gridBagConstraints);
+
+        jLabel17.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        jLabel17.setPreferredSize(new Dimension(24, 24));
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+        jPanel1.add(jLabel17, gridBagConstraints);
 
         setLayout(new GridBagLayout());
     }// </editor-fold>//GEN-END:initComponents
@@ -144,8 +285,24 @@ public class MinefieldPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JLabel jLabel1;
+    private JLabel jLabel10;
+    private JLabel jLabel11;
+    private JLabel jLabel12;
+    private JLabel jLabel13;
+    private JLabel jLabel14;
+    private JLabel jLabel15;
+    private JLabel jLabel16;
+    private JLabel jLabel17;
     private JLabel jLabel2;
+    private JLabel jLabel25;
+    private JLabel jLabel26;
+    private JLabel jLabel27;
+    private JLabel jLabel28;
+    private JLabel jLabel29;
     private JLabel jLabel3;
+    private JLabel jLabel30;
+    private JLabel jLabel31;
+    private JLabel jLabel32;
     private JLabel jLabel4;
     private JLabel jLabel5;
     private JLabel jLabel6;
@@ -175,17 +332,6 @@ public class MinefieldPanel extends javax.swing.JPanel {
     private void initNeighbours(Tile[][] tiles) {
         for (int x = 0; x < tiles.length; x++) {
             for (int y = 0; y < tiles[0].length; y++) {
-//                //top row
-//                tiles[x][y].setNorthwestTile(getTile(tiles, x - 1, y - 1));
-//                tiles[x][y].setNorthTile(getTile(tiles, x, y - 1));
-//                tiles[x][y].setNortheastTile(getTile(tiles, x + 1, y - 1));
-//                //middle row
-//                tiles[x][y].setWestTile(getTile(tiles, x - 1, y));
-//                tiles[x][y].setEastTile(getTile(tiles, x + 1, y));
-//                //bottom row
-//                tiles[x][y].setSouthwestTile(getTile(tiles, x - 1, y + 1));
-//                tiles[x][y].setSouthTile(getTile(tiles, x, y + 1));
-//                tiles[x][y].setSoutheastTile(getTile(tiles, x + 1, y + 1));
                 //top row
                 tiles[x][y].addNeighbour(getTile(tiles, x - 1, y - 1));
                 tiles[x][y].addNeighbour(getTile(tiles, x, y - 1));
@@ -228,17 +374,25 @@ public class MinefieldPanel extends javax.swing.JPanel {
         GridBagConstraints gridBagConstraints;
 
         this.setLayout(new GridBagLayout());
-
-        for (int x = 0; x < tiles.length; x++) {
-            for (int y = 0; y < tiles[0].length; y++) {
+        final int xMax = tiles.length;
+        final int yMax = tiles[0].length;
+        for (int x = 0; x < xMax; x++) {
+            for (int y = 0; y < yMax; y++) {
                 gridBagConstraints = new GridBagConstraints();
                 gridBagConstraints.gridx = x;
                 gridBagConstraints.gridy = y;
-                gridBagConstraints.insets = new Insets(-1, -1, -1, -1);
+//                if (x > 0 && y > 0) {
+//                    gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
+//                } else if (x == 0 && y > 0) {
+//                    gridBagConstraints.insets = new Insets(-1, 0, 0, 0);
+//                } else if (x > 0 && y == 0) {
+//                    gridBagConstraints.insets = new Insets(0, -1, 0, 0);
+//                } else if (x == 0 && y == 0) {
+//                    gridBagConstraints.insets = new Insets(0, 0, 0, 0);
+//                }
                 this.add(tiles[x][y], gridBagConstraints);
             }
         }
-
     }
 
 }

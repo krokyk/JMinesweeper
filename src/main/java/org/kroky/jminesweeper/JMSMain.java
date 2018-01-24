@@ -62,7 +62,6 @@ public class JMSMain extends javax.swing.JFrame {
         jPanel3 = new JPanel();
         generateButton = new JButton();
         jPanel4 = new JPanel();
-        jLabel1 = new JLabel();
         jScrollPane2 = new JScrollPane();
         minefieldContainer = new JPanel();
 
@@ -125,21 +124,13 @@ public class JMSMain extends javax.swing.JFrame {
         });
         jPanel3.add(generateButton);
 
-        jLabel1.setText("jLabel1");
-
         GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap())
+            .addGap(0, 318, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGap(0, 112, Short.MAX_VALUE)
         );
 
         GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
@@ -300,7 +291,6 @@ public class JMSMain extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton generateButton;
-    private JLabel jLabel1;
     private JLabel jLabel12;
     private JLabel jLabel8;
     private JLabel jLabel9;
