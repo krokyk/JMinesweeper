@@ -17,11 +17,14 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.kroky.commons.utils.SwingUtils;
+import org.kroky.jminesweeper.events.TileActionEvent;
+import org.kroky.jminesweeper.events.TileActionListener;
 
 /**
  *
@@ -36,18 +39,11 @@ public class Tile extends JLabel {
 
     private final int posX;
     private final int posY;
-//    private Tile northwestTile;
-//    private Tile northTile;
-//    private Tile northeastTile;
-//    private Tile eastTile;
-//    private Tile southeastTile;
-//    private Tile southTile;
-//    private Tile southwestTile;
-//    private Tile westTile;
     private final List<Tile> neighbours = new ArrayList<>();
     private boolean trapped = false;
     private boolean revealed = false;
-    private boolean marked = false;
+    private boolean flagged = false;
+    private final List<TileActionListener> tileActionListeners = new ArrayList<>();
 
     public Tile(int x, int y) {
         this.posX = x;
@@ -72,43 +68,59 @@ public class Tile extends JLabel {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getButton() == MouseEvent.BUTTON1) {
-                    revealTile();
+                    reveal();
                 } else {
                     toggleFlag();
                 }
+                renderIcon();
             }
+
         });
     }
 
-    private void revealTile() {
-        if (isRevealed() || isMarked()) {
+    private void reveal() {
+        if (isRevealed() || isFlagged()) {
             return;
         }
         LOG.info("Revealing [%s,%s]", posX, posY);
         this.setRevealed(true);
         this.setBorder(REVEALED_BORDER);
         this.checkTile(this);
+        fireTileRevealed(new TileActionEvent(this));
     }
 
     private void toggleFlag() {
-        this.setMarked(!isMarked());
-        this.setIcon(isMarked() ? SwingUtils.getIcon("/icons/flag.png", new Dimension(18, 18)) : null);
+        this.setFlagged(!isFlagged());
+
+        fireFlagToggled(new TileActionEvent(this));
     }
 
     private void checkTile(Tile tile) {
-        if (tile.isTrapped()) {
-            tile.setIcon(SwingUtils.getIcon("/icons/mine_exploded.png", new Dimension(18, 18)));
-            //GAME OVER
-            //reveal all mines and reveal wrongly flagged tile
-        } else {
+        if (!tile.isTrapped()) {
             int surroundingMines = (int) tile.getNeighbours().stream().filter(t -> t.isTrapped()).count();
             if (surroundingMines > 0) {
                 tile.setForeground(Colors.getNumberColor(surroundingMines));
                 tile.setText("" + surroundingMines);
             } else {
-                tile.getNeighbours().forEach(t -> t.revealTile());
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        tile.getNeighbours().forEach(t -> t.reveal());
+                    }
+                });
             }
         }
+    }
+
+    private void renderIcon() {
+        if (isFlagged()) {
+            this.setIcon(SwingUtils.getIcon("/icons/flag.png", new Dimension(18, 18)));
+        } else if (isRevealed() && isTrapped()) {
+            this.setIcon(SwingUtils.getIcon("/icons/mine_exploded.png", new Dimension(18, 18)));
+        } else {
+            this.setIcon(null);
+        }
+
     }
 
     public boolean addNeighbour(Tile tile) {
@@ -168,16 +180,28 @@ public class Tile extends JLabel {
     }
 
     /**
-     * @return the marked
+     * @return the flagged
      */
-    public boolean isMarked() {
-        return marked;
+    public boolean isFlagged() {
+        return flagged;
     }
 
     /**
-     * @param marked the marked to set
+     * @param flagged the flagged to set
      */
-    public void setMarked(boolean marked) {
-        this.marked = marked;
+    public void setFlagged(boolean flagged) {
+        this.flagged = flagged;
+    }
+
+    public void addTileActionListener(TileActionListener tileActionListener) {
+        this.tileActionListeners.add(tileActionListener);
+    }
+
+    private void fireFlagToggled(TileActionEvent tileActionEvent) {
+        tileActionListeners.stream().forEach(l -> l.tileFlagToggled(tileActionEvent));
+    }
+
+    private void fireTileRevealed(TileActionEvent tileActionEvent) {
+        tileActionListeners.stream().forEach(l -> l.tileRevealed(tileActionEvent));
     }
 }

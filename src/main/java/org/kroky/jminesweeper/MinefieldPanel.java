@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.kroky.jminesweeper.events.TileActionListener;
 
 /**
  *
@@ -30,9 +31,10 @@ public class MinefieldPanel extends javax.swing.JPanel {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    MinefieldPanel(int xSize, int ySize, int minesPercent) {
+    MinefieldPanel(int xSize, int ySize, int mineCount, TileActionListener tileActionListener) {
         initComponents();
-        initMinefield(xSize, ySize, minesPercent);
+        this.tileActionListener = tileActionListener;
+        initMinefield(xSize, ySize, mineCount);
     }
 
     /**
@@ -312,6 +314,8 @@ public class MinefieldPanel extends javax.swing.JPanel {
     private JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
+    private TileActionListener tileActionListener;
+
     private void initMinefield(int xSize, int ySize, int minesPercent) {
         Tile[][] tiles = initTiles(xSize, ySize);
         placeMinesToTiles(tiles, minesPercent);
@@ -323,6 +327,7 @@ public class MinefieldPanel extends javax.swing.JPanel {
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < ySize; y++) {
                 tiles[x][y] = new Tile(x, y);
+                tiles[x][y].addTileActionListener(tileActionListener);
             }
         }
         initNeighbours(tiles);
@@ -336,7 +341,7 @@ public class MinefieldPanel extends javax.swing.JPanel {
                 tiles[x][y].addNeighbour(getTile(tiles, x - 1, y - 1));
                 tiles[x][y].addNeighbour(getTile(tiles, x, y - 1));
                 tiles[x][y].addNeighbour(getTile(tiles, x + 1, y - 1));
-                //middle row
+                //left and right
                 tiles[x][y].addNeighbour(getTile(tiles, x - 1, y));
                 tiles[x][y].addNeighbour(getTile(tiles, x + 1, y));
                 //bottom row
@@ -355,10 +360,9 @@ public class MinefieldPanel extends javax.swing.JPanel {
         }
     }
 
-    private void placeMinesToTiles(Tile[][] tiles, int minesPercent) {
+    private void placeMinesToTiles(Tile[][] tiles, int mineCount) {
         final int xSize = tiles.length;
         final int ySize = tiles[0].length;
-        int mineCount = (int) Math.round(xSize * ySize * (minesPercent / 100.0));
         Random rand = new Random();
         Set<Pair<Integer, Integer>> randomCoords = new HashSet<>();
         while (randomCoords.size() < mineCount) {

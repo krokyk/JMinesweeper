@@ -5,10 +5,17 @@
  */
 package org.kroky.jminesweeper;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
@@ -19,16 +26,24 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.LayoutStyle;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.kroky.commons.utils.SwingUtils;
+import org.kroky.jminesweeper.events.TileActionEvent;
+import org.kroky.jminesweeper.events.TileActionListener;
 
 /**
  *
  * @author Krokavec Peter
  */
 public class JMSMain extends javax.swing.JFrame {
+
+    private static final Logger LOG = LogManager.getFormatterLogger();
 
     /**
      * Creates new form MainFrame
@@ -46,6 +61,7 @@ public class JMSMain extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        GridBagConstraints gridBagConstraints;
 
         jPanel6 = new JPanel();
         xSlider = new JSlider();
@@ -62,6 +78,10 @@ public class JMSMain extends javax.swing.JFrame {
         jPanel3 = new JPanel();
         generateButton = new JButton();
         jPanel4 = new JPanel();
+        jLabel1 = new JLabel();
+        flagCounterLabel = new JLabel();
+        jLabel3 = new JLabel();
+        timeLabel = new JLabel();
         jScrollPane2 = new JScrollPane();
         minefieldContainer = new JPanel();
 
@@ -124,14 +144,37 @@ public class JMSMain extends javax.swing.JFrame {
         });
         jPanel3.add(generateButton);
 
-        GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 318, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 112, Short.MAX_VALUE)
-        );
+        jPanel4.setLayout(new GridBagLayout());
+
+        jLabel1.setText("Mines left:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel1, gridBagConstraints);
+
+        flagCounterLabel.setBackground(new Color(0, 0, 0));
+        flagCounterLabel.setForeground(new Color(255, 0, 0));
+        flagCounterLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        flagCounterLabel.setText("0000");
+        flagCounterLabel.setAlignmentY(0.0F);
+        flagCounterLabel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        flagCounterLabel.setOpaque(true);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        jPanel4.add(flagCounterLabel, gridBagConstraints);
+
+        jLabel3.setText("Time:");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        jPanel4.add(jLabel3, gridBagConstraints);
+
+        timeLabel.setBackground(new Color(0, 0, 0));
+        timeLabel.setForeground(new Color(255, 0, 0));
+        timeLabel.setText("00:00");
+        timeLabel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        timeLabel.setOpaque(true);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
+        jPanel4.add(timeLabel, gridBagConstraints);
 
         GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -163,7 +206,7 @@ public class JMSMain extends javax.swing.JFrame {
                         .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -186,7 +229,7 @@ public class JMSMain extends javax.swing.JFrame {
                     .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12)
                     .addComponent(popLabel))
-                .addContainerGap())
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
@@ -218,26 +261,30 @@ public class JMSMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void xSliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_xSliderStateChanged
-        String value = String.valueOf(xSlider.getValue());
+        String value = String.valueOf(getSizeX());
         changeLabelValue(xLabel, value);
         if (lockCheckbox.isSelected()) {
-            ySlider.setValue(xSlider.getValue());
+            ySlider.setValue(getSizeX());
             changeLabelValue(yLabel, value);
         }
     }//GEN-LAST:event_xSliderStateChanged
 
     private void ySliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_ySliderStateChanged
-        String value = String.valueOf(ySlider.getValue());
+        String value = String.valueOf(getSizeY());
         changeLabelValue(yLabel, value);
         if (lockCheckbox.isSelected()) {
-            xSlider.setValue(ySlider.getValue());
+            xSlider.setValue(getSizeY());
             changeLabelValue(xLabel, value);
         }
     }//GEN-LAST:event_ySliderStateChanged
 
     private void popSliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_popSliderStateChanged
-        String value = String.valueOf(popSlider.getValue()) + "%";
+        final int percent = getPercent();
+        String value = String.valueOf(percent) + "%";
         changeLabelValue(popLabel, value);
+
+        value = String.format("%s", getMineCount());
+        changeLabelValue(flagCounterLabel, value);
     }//GEN-LAST:event_popSliderStateChanged
 
     private void generateButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
@@ -246,9 +293,9 @@ public class JMSMain extends javax.swing.JFrame {
             minefieldContainer.removeAll();
             minefieldContainer.repaint();
         }
-        MinefieldPanel panel = new MinefieldPanel(xSlider.getValue(), ySlider.getValue(), popSlider.getValue());
+        MinefieldPanel minefieldPanel = new MinefieldPanel(getSizeX(), ySlider.getValue(), getMineCount(), tileActionListener);
         minefieldContainer.add(Box.createHorizontalGlue());
-        minefieldContainer.add(panel);
+        minefieldContainer.add(minefieldPanel);
         minefieldContainer.add(Box.createHorizontalGlue());
         pack();
     }//GEN-LAST:event_generateButtonActionPerformed
@@ -290,8 +337,11 @@ public class JMSMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private JLabel flagCounterLabel;
     private JButton generateButton;
+    private JLabel jLabel1;
     private JLabel jLabel12;
+    private JLabel jLabel3;
     private JLabel jLabel8;
     private JLabel jLabel9;
     private JPanel jPanel2;
@@ -303,18 +353,60 @@ public class JMSMain extends javax.swing.JFrame {
     private JPanel minefieldContainer;
     private JLabel popLabel;
     private JSlider popSlider;
+    private JLabel timeLabel;
     private JLabel xLabel;
     private JSlider xSlider;
     private JLabel yLabel;
     private JSlider ySlider;
     // End of variables declaration//GEN-END:variables
 
+    private TileActionListener tileActionListener;
+
     private void additionalInit() {
+        try {
+            final Font font = SwingUtils.getFont("/fonts/Segment7Standard.ttf", Font.BOLD, 32);
+            flagCounterLabel.setPreferredSize(new Dimension(90, 40));
+            flagCounterLabel.setFont(font);
+            timeLabel.setFont(font);
+        } catch (FontFormatException | IOException e) {
+            LOG.warn("Unable to initialize font for counters. Fallback to default", e);
+        }
+
         SwingUtils.centerOnScreen(this);
+        tileActionListener = new TileActionListener() {
+            @Override
+            public void tileRevealed(TileActionEvent evt) {
+                Tile tile = evt.getSource();
+                LOG.debug("Reveal event coming from tile [%s,%s]", tile.getPosX(), tile.getPosY());
+            }
+
+            @Override
+            public void tileFlagToggled(TileActionEvent evt) {
+                Tile tile = evt.getSource();
+                LOG.debug("Flag toggled event coming from tile [%s,%s]. Tile is now %s.", tile.getPosX(), tile.getPosY(), tile.isFlagged() ? "flagged" : "unflagged");
+            }
+        };
+        pack();
     }
 
     private void changeLabelValue(JLabel label, String value) {
         label.setText(value);
+    }
+
+    private int getMineCount() {
+        return (int) Math.round(getSizeX() * getSizeY() * (getPercent() / 100.0));
+    }
+
+    private int getPercent() {
+        return popSlider.getValue();
+    }
+
+    private int getSizeX() {
+        return xSlider.getValue();
+    }
+
+    private int getSizeY() {
+        return ySlider.getValue();
     }
 
 }
