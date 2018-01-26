@@ -5,6 +5,7 @@
  */
 package org.kroky.jminesweeper;
 
+import org.kroky.jminesweeper.utils.Colors;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -36,6 +37,7 @@ public class Tile extends JLabel {
 
     private static final Border UNREVEALED_BORDER = BorderFactory.createBevelBorder(BevelBorder.RAISED);
     private static final Border REVEALED_BORDER = BorderFactory.createLineBorder(Color.GRAY);
+    private static final GameState GAME_STATE = GameState.getInstance();
 
     private final int posX;
     private final int posY;
@@ -67,12 +69,20 @@ public class Tile extends JLabel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
+                if (GAME_STATE.isGameFinished()) {
+                    LOG.debug("Game is finished");
+                    return;
+                }
+                if (isRevealed()) {
+                    LOG.debug("Tile [%s,%s] already revealed.", posX, posY);
+                    return;
+                }
+
                 if (evt.getButton() == MouseEvent.BUTTON1) {
                     reveal();
                 } else {
                     toggleFlag();
                 }
-                renderIcon();
             }
 
         });
@@ -85,42 +95,35 @@ public class Tile extends JLabel {
         LOG.info("Revealing [%s,%s]", posX, posY);
         this.setRevealed(true);
         this.setBorder(REVEALED_BORDER);
-        this.checkTile(this);
+        if (isTrapped()) {
+            this.setIcon(SwingUtils.getIcon("/icons/mine_exploded.png", new Dimension(18, 18)));
+        }
         fireTileRevealed(new TileActionEvent(this));
+        this.evaluateTile(this);
     }
 
     private void toggleFlag() {
+        if (!this.isFlagged() && GAME_STATE.flagLimitReached()) {
+            LOG.debug("Number of placed flags is already at maximum. Cannot place flags anymore.");
+            return;
+        }
         this.setFlagged(!isFlagged());
-
+        this.setIcon(isFlagged() ? SwingUtils.getIcon("/icons/flag.png", new Dimension(18, 18)) : null);
         fireFlagToggled(new TileActionEvent(this));
     }
 
-    private void checkTile(Tile tile) {
+    private void evaluateTile(Tile tile) {
         if (!tile.isTrapped()) {
             int surroundingMines = (int) tile.getNeighbours().stream().filter(t -> t.isTrapped()).count();
             if (surroundingMines > 0) {
                 tile.setForeground(Colors.getNumberColor(surroundingMines));
                 tile.setText("" + surroundingMines);
             } else {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        tile.getNeighbours().forEach(t -> t.reveal());
-                    }
+                SwingUtilities.invokeLater(() -> {
+                    tile.getNeighbours().forEach(t -> t.reveal());
                 });
             }
         }
-    }
-
-    private void renderIcon() {
-        if (isFlagged()) {
-            this.setIcon(SwingUtils.getIcon("/icons/flag.png", new Dimension(18, 18)));
-        } else if (isRevealed() && isTrapped()) {
-            this.setIcon(SwingUtils.getIcon("/icons/mine_exploded.png", new Dimension(18, 18)));
-        } else {
-            this.setIcon(null);
-        }
-
     }
 
     public boolean addNeighbour(Tile tile) {
@@ -189,7 +192,7 @@ public class Tile extends JLabel {
     /**
      * @param flagged the flagged to set
      */
-    public void setFlagged(boolean flagged) {
+    private void setFlagged(boolean flagged) {
         this.flagged = flagged;
     }
 
@@ -203,5 +206,13 @@ public class Tile extends JLabel {
 
     private void fireTileRevealed(TileActionEvent tileActionEvent) {
         tileActionListeners.stream().forEach(l -> l.tileRevealed(tileActionEvent));
+    }
+
+    public void setGameOverIcon() {
+        if (isFlagged() && !isTrapped()) {
+            this.setIcon(SwingUtils.getIcon("/icons/mine_wrong.png", new Dimension(18, 18)));
+        } else if (!isFlagged() && isTrapped() && !isRevealed()) {
+            this.setIcon(SwingUtils.getIcon("/icons/mine.png", new Dimension(18, 18)));
+        }
     }
 }

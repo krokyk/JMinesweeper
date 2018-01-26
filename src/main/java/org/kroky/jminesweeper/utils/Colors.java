@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.kroky.jminesweeper;
+package org.kroky.jminesweeper.utils;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author Krokavec Peter
  */
-class Colors {
+public class Colors {
 
     private static final Map<Integer, Color> MINE_COUNT_COLOR = new HashMap<>();
 

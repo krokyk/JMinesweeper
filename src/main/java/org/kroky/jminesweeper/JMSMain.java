@@ -10,9 +10,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -22,11 +19,13 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
@@ -34,8 +33,9 @@ import javax.swing.event.ChangeListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.kroky.commons.utils.SwingUtils;
-import org.kroky.jminesweeper.events.TileActionEvent;
-import org.kroky.jminesweeper.events.TileActionListener;
+import org.kroky.jminesweeper.events.GameStateChangedEvent;
+import org.kroky.jminesweeper.events.GameStateChangedListener;
+import org.kroky.jminesweeper.utils.StopWatch;
 
 /**
  *
@@ -61,7 +61,6 @@ public class JMSMain extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        GridBagConstraints gridBagConstraints;
 
         jScrollPane2 = new JScrollPane();
         minefieldContainer = new JPanel();
@@ -77,13 +76,15 @@ public class JMSMain extends javax.swing.JFrame {
         jPanel3 = new JPanel();
         generateButton = new JButton();
         jPanel4 = new JPanel();
-        flagCounterLabel = new JLabel();
-        timeLabel = new JLabel();
         jButton2 = new JButton();
+        jButton1 = new JButton();
+        jLabel1 = new JLabel();
+        jLabel2 = new JLabel();
         jLabel12 = new JLabel();
         popSlider = new JSlider();
         popLabel = new JLabel();
-        jButton1 = new JButton();
+        flagCounterLabel = new JLabel();
+        timeLabel = new JLabel();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,7 +99,7 @@ public class JMSMain extends javax.swing.JFrame {
 
         xSlider.setMinimum(10);
         xSlider.setToolTipText("");
-        xSlider.setValue(20);
+        xSlider.setValue(10);
         xSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent evt) {
                 xSliderStateChanged(evt);
@@ -111,7 +112,7 @@ public class JMSMain extends javax.swing.JFrame {
         jLabel9.setText("Y:");
 
         ySlider.setMinimum(10);
-        ySlider.setValue(20);
+        ySlider.setValue(10);
         ySlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent evt) {
                 ySliderStateChanged(evt);
@@ -137,36 +138,6 @@ public class JMSMain extends javax.swing.JFrame {
         });
         jPanel3.add(generateButton);
 
-        jPanel4.setLayout(new GridBagLayout());
-
-        flagCounterLabel.setBackground(new Color(0, 0, 0));
-        flagCounterLabel.setForeground(new Color(255, 0, 0));
-        flagCounterLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        flagCounterLabel.setText("0000");
-        flagCounterLabel.setText(String.format("%04d", getMineCount()));
-        flagCounterLabel.setAlignmentY(0.0F);
-        flagCounterLabel.setBorder(new LineBorder(new Color(0, 0, 0), 3, true));
-        flagCounterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-        flagCounterLabel.setOpaque(true);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel4.add(flagCounterLabel, gridBagConstraints);
-
-        timeLabel.setBackground(new Color(0, 0, 0));
-        timeLabel.setForeground(new Color(255, 0, 0));
-        timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        timeLabel.setText("00:00");
-        timeLabel.setBorder(new LineBorder(new Color(0, 0, 0), 3, true));
-        timeLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-        timeLabel.setOpaque(true);
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel4.add(timeLabel, gridBagConstraints);
-
         jButton2.setBackground(new Color(0, 0, 0));
         jButton2.setForeground(new Color(255, 51, 51));
         jButton2.setText("00:00");
@@ -176,24 +147,6 @@ public class JMSMain extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 0;
-        jPanel4.add(jButton2, gridBagConstraints);
-
-        jLabel12.setText("Mine population:");
-
-        popSlider.setMaximum(99);
-        popSlider.setMinimum(1);
-        popSlider.setValue(15);
-        popSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                popSliderStateChanged(evt);
-            }
-        });
-
-        popLabel.setText("20%");
-        popLabel.setText(String.valueOf(popSlider.getValue()) + "%");
 
         jButton1.setBackground(new Color(0, 0, 0));
         jButton1.setForeground(new Color(255, 51, 51));
@@ -204,6 +157,68 @@ public class JMSMain extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("Elapsed time:");
+
+        jLabel2.setText("Mines left:");
+
+        GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(0, 119, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2))
+                    .addGroup(GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))))
+        );
+        jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jLabel1))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel2))
+                .addContainerGap())
+        );
+
+        jLabel12.setText("Mine population:");
+
+        popSlider.setMaximum(99);
+        popSlider.setMinimum(1);
+        popSlider.setValue(5);
+        popSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent evt) {
+                popSliderStateChanged(evt);
+            }
+        });
+
+        popLabel.setText("20%");
+        popLabel.setText(String.valueOf(popSlider.getValue()) + "%");
+
+        flagCounterLabel.setBackground(new Color(0, 0, 0));
+        flagCounterLabel.setForeground(new Color(255, 0, 0));
+        flagCounterLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        flagCounterLabel.setText("0000");
+        flagCounterLabel.setAlignmentY(0.0F);
+        flagCounterLabel.setBorder(new LineBorder(new Color(0, 0, 0), 3, true));
+        flagCounterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+        flagCounterLabel.setOpaque(true);
+
+        timeLabel.setBackground(new Color(0, 0, 0));
+        timeLabel.setForeground(new Color(255, 0, 0));
+        timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        timeLabel.setText("00:00");
+        timeLabel.setBorder(new LineBorder(new Color(0, 0, 0), 3, true));
+        timeLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+        timeLabel.setOpaque(true);
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -231,18 +246,20 @@ public class JMSMain extends javax.swing.JFrame {
                             .addComponent(yLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
                             .addComponent(popLabel))))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(flagCounterLabel)
+                    .addComponent(timeLabel))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -260,10 +277,15 @@ public class JMSMain extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                             .addComponent(jLabel12)
                             .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(popLabel)
-                            .addComponent(jButton1)))
-                    .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(popLabel)))
+                    .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(flagCounterLabel)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(timeLabel)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -279,8 +301,8 @@ public class JMSMain extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 288, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 353, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE))
         );
 
         pack();
@@ -292,7 +314,7 @@ public class JMSMain extends javax.swing.JFrame {
             minefieldContainer.removeAll();
             minefieldContainer.repaint();
         }
-        MinefieldPanel minefieldPanel = new MinefieldPanel(getSizeX(), ySlider.getValue(), getMineCount(), tileActionListener);
+        MinefieldPanel minefieldPanel = new MinefieldPanel(getSizeX(), getSizeY(), getMineCount());
         minefieldContainer.add(Box.createHorizontalGlue());
         minefieldContainer.add(minefieldPanel);
         minefieldContainer.add(Box.createHorizontalGlue());
@@ -302,32 +324,28 @@ public class JMSMain extends javax.swing.JFrame {
     private void popSliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_popSliderStateChanged
         final int percent = getPercent();
         String value = String.valueOf(percent) + "%";
-        changeLabelValue(popLabel, value);
-
-        value = String.format("%04d", getMineCount());
-        changeLabelValue(flagCounterLabel, value);
+        setLabelValue(popLabel, value);
+        setFlagCounterText(getMineCount());
     }//GEN-LAST:event_popSliderStateChanged
 
     private void ySliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_ySliderStateChanged
         String value = String.valueOf(getSizeY());
-        changeLabelValue(yLabel, value);
+        setLabelValue(yLabel, value);
         if (lockCheckbox.isSelected()) {
             xSlider.setValue(getSizeY());
-            changeLabelValue(xLabel, value);
+            setLabelValue(xLabel, value);
         }
-        value = String.format("%04d", getMineCount());
-        changeLabelValue(flagCounterLabel, value);
+        setFlagCounterText(getMineCount());
     }//GEN-LAST:event_ySliderStateChanged
 
     private void xSliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_xSliderStateChanged
         String value = String.valueOf(getSizeX());
-        changeLabelValue(xLabel, value);
+        setLabelValue(xLabel, value);
         if (lockCheckbox.isSelected()) {
             ySlider.setValue(getSizeX());
-            changeLabelValue(yLabel, value);
+            setLabelValue(yLabel, value);
         }
-        value = String.format("%04d", getMineCount());
-        changeLabelValue(flagCounterLabel, value);
+        setFlagCounterText(getMineCount());
     }//GEN-LAST:event_xSliderStateChanged
 
     private void jButton1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -354,23 +372,18 @@ public class JMSMain extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JMSMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JMSMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JMSMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JMSMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException e) {
+            LOG.warn("Unable to use Nimbus L&F.", e);
         }
         //</editor-fold>
         //</editor-fold>
 
+        //</editor-fold>
+        //</editor-fold>
+
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JMSMain().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new JMSMain().setVisible(true);
         });
     }
 
@@ -379,7 +392,9 @@ public class JMSMain extends javax.swing.JFrame {
     private JButton generateButton;
     private JButton jButton1;
     private JButton jButton2;
+    private JLabel jLabel1;
     private JLabel jLabel12;
+    private JLabel jLabel2;
     private JLabel jLabel8;
     private JLabel jLabel9;
     private JPanel jPanel1;
@@ -398,7 +413,8 @@ public class JMSMain extends javax.swing.JFrame {
     private JSlider ySlider;
     // End of variables declaration//GEN-END:variables
 
-    private TileActionListener tileActionListener;
+    private static final GameState GAME_STATE = GameState.getInstance();
+    private Timer timer;
 
     private void additionalInit() {
 //        UIDefaults overrides = new UIDefaults();
@@ -411,6 +427,8 @@ public class JMSMain extends javax.swing.JFrame {
 //        defaults.put("Button[Disabled].backgroundPainter", new ButtonPainter(null, 7));
 //        SwingUtilities.updateComponentTreeUI(jButton1);
 
+        setFlagCounterText(getMineCount());
+
         try {
             final Font font = SwingUtils.getFont("/fonts/Digital Dismay.otf", Font.PLAIN, 32);
             jButton1.setFont(font);
@@ -421,23 +439,37 @@ public class JMSMain extends javax.swing.JFrame {
         }
 
         SwingUtils.centerOnScreen(this);
-        tileActionListener = new TileActionListener() {
+        GAME_STATE.addGameStateChangedListener(new GameStateChangedListener() {
             @Override
-            public void tileRevealed(TileActionEvent evt) {
-                Tile tile = evt.getSource();
-                LOG.debug("Reveal event coming from tile [%s,%s]", tile.getPosX(), tile.getPosY());
+            public void gameStateChange(GameStateChangedEvent evt) {
+                setFlagCounterText(evt.getFlagsRemaining());
             }
 
             @Override
-            public void tileFlagToggled(TileActionEvent evt) {
-                Tile tile = evt.getSource();
-                LOG.debug("Flag toggled event coming from tile [%s,%s]. Tile is now %s.", tile.getPosX(), tile.getPosY(), tile.isFlagged() ? "flagged" : "unflagged");
+            public void win(GameStateChangedEvent evt) {
+                LOG.info("WIN!!!");
+                JOptionPane.showMessageDialog(JMSMain.this, "WIN!!!");
             }
-        };
+
+            @Override
+            public void lose(GameStateChangedEvent evt) {
+                LOG.info("GAME OVER!!!");
+                JOptionPane.showMessageDialog(JMSMain.this, "GAME OVER!!!");
+            }
+
+        });
+
+        timer = new StopWatch(1000, timeLabel);
+        timer.stop();
         pack();
     }
 
-    private void changeLabelValue(JLabel label, String value) {
+    private void setFlagCounterText(int remainingFlagCount) {
+        String value = String.format("%04d", remainingFlagCount);
+        setLabelValue(flagCounterLabel, value);
+    }
+
+    private void setLabelValue(JLabel label, String value) {
         label.setText(value);
     }
 
