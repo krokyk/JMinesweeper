@@ -63,29 +63,38 @@ public class JMSMain extends javax.swing.JFrame {
     private void initComponents() {
         GridBagConstraints gridBagConstraints;
 
-        jPanel6 = new JPanel();
-        xSlider = new JSlider();
-        jLabel9 = new JLabel();
+        jScrollPane2 = new JScrollPane();
+        minefieldContainer = new JPanel();
+        jPanel1 = new JPanel();
         jLabel8 = new JLabel();
-        ySlider = new JSlider();
+        xSlider = new JSlider();
         xLabel = new JLabel();
+        jLabel9 = new JLabel();
+        ySlider = new JSlider();
         yLabel = new JLabel();
-        jLabel12 = new JLabel();
-        popSlider = new JSlider();
-        popLabel = new JLabel();
         jPanel2 = new JPanel();
         lockCheckbox = new JCheckBox();
         jPanel3 = new JPanel();
         generateButton = new JButton();
         jPanel4 = new JPanel();
-        jLabel1 = new JLabel();
         flagCounterLabel = new JLabel();
-        jLabel3 = new JLabel();
         timeLabel = new JLabel();
-        jScrollPane2 = new JScrollPane();
-        minefieldContainer = new JPanel();
+        jButton2 = new JButton();
+        jLabel12 = new JLabel();
+        popSlider = new JSlider();
+        popLabel = new JLabel();
+        jButton1 = new JButton();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        jScrollPane2.setMaximumSize(new Dimension(640, 640));
+        jScrollPane2.setMinimumSize(new Dimension(320, 320));
+        jScrollPane2.setPreferredSize(new Dimension(640, 640));
+
+        minefieldContainer.setLayout(new BoxLayout(minefieldContainer, BoxLayout.LINE_AXIS));
+        jScrollPane2.setViewportView(minefieldContainer);
+
+        jLabel8.setText("X:");
 
         xSlider.setMinimum(10);
         xSlider.setToolTipText("");
@@ -96,9 +105,10 @@ public class JMSMain extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setText("Y:");
+        xLabel.setText("20");
+        xLabel.setText(String.valueOf(xSlider.getValue()));
 
-        jLabel8.setText("X:");
+        jLabel9.setText("Y:");
 
         ySlider.setMinimum(10);
         ySlider.setValue(20);
@@ -108,25 +118,8 @@ public class JMSMain extends javax.swing.JFrame {
             }
         });
 
-        xLabel.setText("20");
-        xLabel.setText(String.valueOf(xSlider.getValue()));
-
         yLabel.setText("20");
         yLabel.setText(String.valueOf(ySlider.getValue()));
-
-        jLabel12.setText("Mine population:");
-
-        popSlider.setMaximum(99);
-        popSlider.setMinimum(1);
-        popSlider.setValue(15);
-        popSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                popSliderStateChanged(evt);
-            }
-        });
-
-        popLabel.setText("20%");
-        popLabel.setText(String.valueOf(popSlider.getValue()) + "%");
 
         jPanel2.setLayout(new BoxLayout(jPanel2, BoxLayout.LINE_AXIS));
 
@@ -146,146 +139,152 @@ public class JMSMain extends javax.swing.JFrame {
 
         jPanel4.setLayout(new GridBagLayout());
 
-        jLabel1.setText("Mines left:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel4.add(jLabel1, gridBagConstraints);
-
         flagCounterLabel.setBackground(new Color(0, 0, 0));
         flagCounterLabel.setForeground(new Color(255, 0, 0));
         flagCounterLabel.setHorizontalAlignment(SwingConstants.CENTER);
         flagCounterLabel.setText("0000");
+        flagCounterLabel.setText(String.format("%04d", getMineCount()));
         flagCounterLabel.setAlignmentY(0.0F);
-        flagCounterLabel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        flagCounterLabel.setBorder(new LineBorder(new Color(0, 0, 0), 3, true));
+        flagCounterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
         flagCounterLabel.setOpaque(true);
         gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         jPanel4.add(flagCounterLabel, gridBagConstraints);
 
-        jLabel3.setText("Time:");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.insets = new Insets(5, 5, 5, 5);
-        jPanel4.add(jLabel3, gridBagConstraints);
-
         timeLabel.setBackground(new Color(0, 0, 0));
         timeLabel.setForeground(new Color(255, 0, 0));
+        timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timeLabel.setText("00:00");
-        timeLabel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+        timeLabel.setBorder(new LineBorder(new Color(0, 0, 0), 3, true));
+        timeLabel.setHorizontalTextPosition(SwingConstants.CENTER);
         timeLabel.setOpaque(true);
         gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new Insets(5, 5, 5, 5);
         jPanel4.add(timeLabel, gridBagConstraints);
 
-        GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
-                            .addComponent(jLabel12)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addGroup(GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
-                            .addComponent(jLabel9)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(ySlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
+        jButton2.setBackground(new Color(0, 0, 0));
+        jButton2.setForeground(new Color(255, 51, 51));
+        jButton2.setText("00:00");
+        jButton2.setEnabled(false);
+        jButton2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        jPanel4.add(jButton2, gridBagConstraints);
+
+        jLabel12.setText("Mine population:");
+
+        popSlider.setMaximum(99);
+        popSlider.setMinimum(1);
+        popSlider.setValue(15);
+        popSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent evt) {
+                popSliderStateChanged(evt);
+            }
+        });
+
+        popLabel.setText("20%");
+        popLabel.setText(String.valueOf(popSlider.getValue()) + "%");
+
+        jButton1.setBackground(new Color(0, 0, 0));
+        jButton1.setForeground(new Color(255, 51, 51));
+        jButton1.setText("0000");
+        jButton1.setEnabled(false);
+        jButton1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(xSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(popLabel, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(xSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(xLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addGroup(GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ySlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(yLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(xLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(popLabel))))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel6Layout.setVerticalGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                            .addComponent(xSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)
-                            .addComponent(xLabel))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                            .addComponent(jLabel9)
-                            .addComponent(ySlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(yLabel)))
-                    .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                    .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12)
-                    .addComponent(popLabel))
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
-                    .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, 173, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE))
         );
-
-        jScrollPane2.setMaximumSize(new Dimension(640, 640));
-        jScrollPane2.setMinimumSize(new Dimension(320, 320));
-        jScrollPane2.setPreferredSize(new Dimension(640, 640));
-
-        minefieldContainer.setLayout(new BoxLayout(minefieldContainer, BoxLayout.LINE_AXIS));
-        jScrollPane2.setViewportView(minefieldContainer);
+        jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                    .addComponent(xSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel8)
+                                    .addComponent(xLabel))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                    .addComponent(jLabel9)
+                                    .addComponent(ySlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(yLabel)))
+                            .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                            .addComponent(jLabel12)
+                            .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(popLabel)
+                            .addComponent(jButton1)))
+                    .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 717, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel6, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 288, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 353, GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void xSliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_xSliderStateChanged
-        String value = String.valueOf(getSizeX());
-        changeLabelValue(xLabel, value);
-        if (lockCheckbox.isSelected()) {
-            ySlider.setValue(getSizeX());
-            changeLabelValue(yLabel, value);
-        }
-    }//GEN-LAST:event_xSliderStateChanged
-
-    private void ySliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_ySliderStateChanged
-        String value = String.valueOf(getSizeY());
-        changeLabelValue(yLabel, value);
-        if (lockCheckbox.isSelected()) {
-            xSlider.setValue(getSizeY());
-            changeLabelValue(xLabel, value);
-        }
-    }//GEN-LAST:event_ySliderStateChanged
-
-    private void popSliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_popSliderStateChanged
-        final int percent = getPercent();
-        String value = String.valueOf(percent) + "%";
-        changeLabelValue(popLabel, value);
-
-        value = String.format("%s", getMineCount());
-        changeLabelValue(flagCounterLabel, value);
-    }//GEN-LAST:event_popSliderStateChanged
 
     private void generateButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         Component[] children = minefieldContainer.getComponents();
@@ -299,6 +298,45 @@ public class JMSMain extends javax.swing.JFrame {
         minefieldContainer.add(Box.createHorizontalGlue());
         pack();
     }//GEN-LAST:event_generateButtonActionPerformed
+
+    private void popSliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_popSliderStateChanged
+        final int percent = getPercent();
+        String value = String.valueOf(percent) + "%";
+        changeLabelValue(popLabel, value);
+
+        value = String.format("%04d", getMineCount());
+        changeLabelValue(flagCounterLabel, value);
+    }//GEN-LAST:event_popSliderStateChanged
+
+    private void ySliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_ySliderStateChanged
+        String value = String.valueOf(getSizeY());
+        changeLabelValue(yLabel, value);
+        if (lockCheckbox.isSelected()) {
+            xSlider.setValue(getSizeY());
+            changeLabelValue(xLabel, value);
+        }
+        value = String.format("%04d", getMineCount());
+        changeLabelValue(flagCounterLabel, value);
+    }//GEN-LAST:event_ySliderStateChanged
+
+    private void xSliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_xSliderStateChanged
+        String value = String.valueOf(getSizeX());
+        changeLabelValue(xLabel, value);
+        if (lockCheckbox.isSelected()) {
+            ySlider.setValue(getSizeX());
+            changeLabelValue(yLabel, value);
+        }
+        value = String.format("%04d", getMineCount());
+        changeLabelValue(flagCounterLabel, value);
+    }//GEN-LAST:event_xSliderStateChanged
+
+    private void jButton1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -339,15 +377,15 @@ public class JMSMain extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JLabel flagCounterLabel;
     private JButton generateButton;
-    private JLabel jLabel1;
+    private JButton jButton1;
+    private JButton jButton2;
     private JLabel jLabel12;
-    private JLabel jLabel3;
     private JLabel jLabel8;
     private JLabel jLabel9;
+    private JPanel jPanel1;
     private JPanel jPanel2;
     private JPanel jPanel3;
     private JPanel jPanel4;
-    private JPanel jPanel6;
     private JScrollPane jScrollPane2;
     private JCheckBox lockCheckbox;
     private JPanel minefieldContainer;
@@ -363,9 +401,19 @@ public class JMSMain extends javax.swing.JFrame {
     private TileActionListener tileActionListener;
 
     private void additionalInit() {
+//        UIDefaults overrides = new UIDefaults();
+//        overrides.put("Button[Disabled].backgroundPainter", new ButtonPainter(null, 7));
+//        jButton1.putClientProperty("Nimbus.Overrides", overrides);
+//        jButton1.putClientProperty("Nimbus.Overrides.InheritDefaults", Boolean.TRUE);
+//        SwingUtilities.updateComponentTreeUI(jButton1);
+//
+//        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+//        defaults.put("Button[Disabled].backgroundPainter", new ButtonPainter(null, 7));
+//        SwingUtilities.updateComponentTreeUI(jButton1);
+
         try {
-            final Font font = SwingUtils.getFont("/fonts/Segment7Standard.ttf", Font.BOLD, 32);
-            flagCounterLabel.setPreferredSize(new Dimension(90, 40));
+            final Font font = SwingUtils.getFont("/fonts/Digital Dismay.otf", Font.PLAIN, 32);
+            jButton1.setFont(font);
             flagCounterLabel.setFont(font);
             timeLabel.setFont(font);
         } catch (FontFormatException | IOException e) {
