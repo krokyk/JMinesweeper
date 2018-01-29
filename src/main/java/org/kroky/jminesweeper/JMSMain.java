@@ -82,6 +82,7 @@ public class JMSMain extends javax.swing.JFrame {
         popLabel = new JLabel();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("JMinesweeper");
 
         jScrollPane2.setMaximumSize(new Dimension(640, 640));
         jScrollPane2.setMinimumSize(new Dimension(320, 320));
