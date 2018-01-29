@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.LayoutStyle;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -62,14 +63,6 @@ public class JMSMain extends javax.swing.JFrame {
         jScrollPane2 = new JScrollPane();
         minefieldContainer = new JPanel();
         jPanel1 = new JPanel();
-        jLabel8 = new JLabel();
-        xSlider = new JSlider();
-        xLabel = new JLabel();
-        jLabel9 = new JLabel();
-        ySlider = new JSlider();
-        yLabel = new JLabel();
-        jPanel2 = new JPanel();
-        lockCheckbox = new JCheckBox();
         jPanel3 = new JPanel();
         generateButton = new JButton();
         jPanel4 = new JPanel();
@@ -77,52 +70,28 @@ public class JMSMain extends javax.swing.JFrame {
         jLabel1 = new JLabel();
         timeCounter = new JButton();
         flagCounter = new JButton();
+        jPanel5 = new JPanel();
+        jLabel8 = new JLabel();
+        yLabel = new JLabel();
         jLabel12 = new JLabel();
-        popSlider = new JSlider();
+        xLabel = new JLabel();
         popLabel = new JLabel();
+        ySlider = new JSlider();
+        xSlider = new JSlider();
+        jPanel2 = new JPanel();
+        lockCheckbox = new JCheckBox();
+        jLabel9 = new JLabel();
+        popSlider = new JSlider();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("JMinesweeper");
 
         jScrollPane2.setMaximumSize(new Dimension(640, 640));
-        jScrollPane2.setMinimumSize(new Dimension(320, 320));
+        jScrollPane2.setMinimumSize(new Dimension(640, 640));
         jScrollPane2.setPreferredSize(new Dimension(640, 640));
 
         minefieldContainer.setLayout(new BoxLayout(minefieldContainer, BoxLayout.LINE_AXIS));
         jScrollPane2.setViewportView(minefieldContainer);
-
-        jLabel8.setText("X:");
-
-        xSlider.setMinimum(10);
-        xSlider.setToolTipText("");
-        xSlider.setValue(10);
-        xSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                xSliderStateChanged(evt);
-            }
-        });
-
-        xLabel.setText("20");
-        xLabel.setText(String.valueOf(xSlider.getValue()));
-
-        jLabel9.setText("Y:");
-
-        ySlider.setMinimum(10);
-        ySlider.setValue(10);
-        ySlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-                ySliderStateChanged(evt);
-            }
-        });
-
-        yLabel.setText("20");
-        yLabel.setText(String.valueOf(ySlider.getValue()));
-
-        jPanel2.setLayout(new BoxLayout(jPanel2, BoxLayout.LINE_AXIS));
-
-        lockCheckbox.setSelected(true);
-        lockCheckbox.setText("Lock");
-        jPanel2.add(lockCheckbox);
 
         jPanel3.setLayout(new BoxLayout(jPanel3, BoxLayout.LINE_AXIS));
 
@@ -157,7 +126,7 @@ public class JMSMain extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(162, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2, GroupLayout.Alignment.TRAILING))
@@ -177,79 +146,125 @@ public class JMSMain extends javax.swing.JFrame {
                     .addComponent(jLabel2)))
         );
 
+        jLabel8.setText("X:");
+
+        yLabel.setText("20");
+
         jLabel12.setText("Mine population:");
+
+        xLabel.setText("20");
+
+        popLabel.setText("20%");
+
+        ySlider.setMinimum(10);
+        ySlider.setValue(20);
+        ySlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent evt) {
+                ySliderStateChanged(evt);
+            }
+        });
+
+        xSlider.setMinimum(10);
+        xSlider.setToolTipText("");
+        xSlider.setValue(20);
+        xSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent evt) {
+                xSliderStateChanged(evt);
+            }
+        });
+
+        jPanel2.setLayout(new BoxLayout(jPanel2, BoxLayout.LINE_AXIS));
+
+        lockCheckbox.setSelected(true);
+        lockCheckbox.setText("Lock");
+        jPanel2.add(lockCheckbox);
+
+        jLabel9.setText("Y:");
 
         popSlider.setMaximum(99);
         popSlider.setMinimum(1);
-        popSlider.setValue(5);
+        popSlider.setValue(10);
         popSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent evt) {
                 popSliderStateChanged(evt);
             }
         });
 
-        popLabel.setText("20%");
-        popLabel.setText(String.valueOf(popSlider.getValue()) + "%");
-
-        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+        GroupLayout jPanel5Layout = new GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(xSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(xLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel12)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                            .addGroup(GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(ySlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(yLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
                             .addComponent(popLabel))))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16)
-                .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         );
-        jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+        jPanel5Layout.setVerticalGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                             .addComponent(xSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8)
                             .addComponent(xLabel))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                             .addComponent(jLabel9)
                             .addComponent(ySlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addComponent(yLabel)))
-                    .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                .addGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel12)
                     .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(popLabel)))
-            .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        );
+
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel1Layout.linkSize(SwingConstants.HORIZONTAL, new Component[] {jPanel4, jPanel5});
+
+        jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -269,6 +284,7 @@ public class JMSMain extends javax.swing.JFrame {
     private void generateButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         Component[] children = minefieldContainer.getComponents();
         generateButton.setIcon(SwingUtils.getIcon("/icons/smiley_start.png", new Dimension(60, 60)));
+        LOG.info(jScrollPane2.getSize());
         if (children != null) {
             minefieldContainer.removeAll();
             minefieldContainer.repaint();
@@ -351,6 +367,7 @@ public class JMSMain extends javax.swing.JFrame {
     private JPanel jPanel2;
     private JPanel jPanel3;
     private JPanel jPanel4;
+    private JPanel jPanel5;
     private JScrollPane jScrollPane2;
     private JCheckBox lockCheckbox;
     private JPanel minefieldContainer;
@@ -367,6 +384,9 @@ public class JMSMain extends javax.swing.JFrame {
     private StopWatch stopWatch;
 
     private void additionalInit() {
+        xLabel.setText(String.valueOf(xSlider.getValue()));
+        yLabel.setText(String.valueOf(ySlider.getValue()));
+        popLabel.setText(String.valueOf(popSlider.getValue()) + "%");
         setFlagCounterText(getMineCount());
 
         try {
