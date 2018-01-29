@@ -22,7 +22,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.kroky.commons.utils.SwingUtils;
+import org.kroky.commons.swing.utils.SwingUtils;
 import org.kroky.jminesweeper.events.TileActionEvent;
 import org.kroky.jminesweeper.events.TileActionListener;
 import org.kroky.jminesweeper.utils.Colors;

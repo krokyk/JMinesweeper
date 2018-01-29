@@ -29,7 +29,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.kroky.commons.utils.SwingUtils;
+import org.kroky.commons.swing.utils.SwingUtils;
 import org.kroky.jminesweeper.events.GameStateChangedEvent;
 import org.kroky.jminesweeper.events.GameStateChangedListener;
 import org.kroky.jminesweeper.utils.StopWatch;
