@@ -35,8 +35,11 @@ public class GameState {
             LOG.debug("Reveal event coming from tile [%s,%s]", tile.getPosX(), tile.getPosY());
             if (tile.isTrapped()) {
                 tileStream().forEach(t -> t.setGameOverIcon());
+                gameFinished = true;
                 fireGameOver(new GameStateChangedEvent(getRemainingFlagCount()));
             } else if (isWin()) {
+                gameFinished = true;
+                tileStream().forEach(t -> t.setWinIcon());
                 fireWin(new GameStateChangedEvent(getRemainingFlagCount()));
             }
         }
@@ -46,9 +49,6 @@ public class GameState {
             Tile tile = evt.getSource();
             LOG.debug("Flag toggled event coming from tile [%s,%s]. Tile is now %s.", tile.getPosX(), tile.getPosY(), tile.isFlagged() ? "flagged" : "unflagged");
             fireFlagChange(new GameStateChangedEvent(getRemainingFlagCount()));
-            if (isWin()) {
-                fireWin(new GameStateChangedEvent(getRemainingFlagCount()));
-            }
         }
     };
     private final List<GameStateChangedListener> gameStateChangedListeners = new ArrayList<>();
@@ -85,7 +85,7 @@ public class GameState {
     }
 
     public boolean isWin() {
-        return areMinesCorrectlyFlagged() && revealedTilesCount() == (getTileCount() - getMineCount());
+        return getRevealedTilesCount() == getTileCount() - getMineCount();
     }
 
     public boolean areMinesCorrectlyFlagged() {
@@ -93,7 +93,7 @@ public class GameState {
                 || (!tile.isTrapped() && tile.isFlagged())).findAny().isPresent();
     }
 
-    public int revealedTilesCount() {
+    public int getRevealedTilesCount() {
         return (int) tileStream().filter(tile -> tile.isRevealed()).count();
     }
 

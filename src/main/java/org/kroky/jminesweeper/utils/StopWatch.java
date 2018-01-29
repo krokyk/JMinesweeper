@@ -5,33 +5,25 @@
  */
 package org.kroky.jminesweeper.utils;
 
-import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
 import javax.swing.Timer;
 
 /**
  *
- * @author Peter Krokavec
+ * @author Krokavec Peter
  */
 public class StopWatch extends Timer {
 
-    private long lastTick;
+    private StopWatchListener listener;
 
-    public StopWatch(int delay, JLabel label) {
-        super(delay, (ActionEvent e) -> {
-
-            label.setText("");
-        });
+    public StopWatch(int delay, StopWatchListener listener) {
+        super(delay, listener);
+        this.listener = listener;
     }
 
     @Override
     public void start() {
-        lastTick = System.currentTimeMillis();
+        listener.reset();
         super.start(); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public long getLastTick() {
-        return lastTick;
     }
 
 }

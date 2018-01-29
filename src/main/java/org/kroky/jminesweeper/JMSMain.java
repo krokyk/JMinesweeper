@@ -19,15 +19,11 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.LayoutStyle;
-import javax.swing.SwingConstants;
-import javax.swing.Timer;
 import javax.swing.WindowConstants;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.apache.logging.log4j.LogManager;
@@ -36,6 +32,7 @@ import org.kroky.commons.utils.SwingUtils;
 import org.kroky.jminesweeper.events.GameStateChangedEvent;
 import org.kroky.jminesweeper.events.GameStateChangedListener;
 import org.kroky.jminesweeper.utils.StopWatch;
+import org.kroky.jminesweeper.utils.StopWatchListener;
 
 /**
  *
@@ -76,15 +73,13 @@ public class JMSMain extends javax.swing.JFrame {
         jPanel3 = new JPanel();
         generateButton = new JButton();
         jPanel4 = new JPanel();
-        jButton2 = new JButton();
-        jButton1 = new JButton();
-        jLabel1 = new JLabel();
         jLabel2 = new JLabel();
+        jLabel1 = new JLabel();
+        timeCounter = new JButton();
+        flagCounter = new JButton();
         jLabel12 = new JLabel();
         popSlider = new JSlider();
         popLabel = new JLabel();
-        flagCounterLabel = new JLabel();
-        timeLabel = new JLabel();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -130,7 +125,10 @@ public class JMSMain extends javax.swing.JFrame {
 
         jPanel3.setLayout(new BoxLayout(jPanel3, BoxLayout.LINE_AXIS));
 
-        generateButton.setText("Generate!");
+        generateButton.setMaximumSize(new Dimension(82, 82));
+        generateButton.setMinimumSize(new Dimension(82, 82));
+        generateButton.setPreferredSize(new Dimension(82, 82));
+        generateButton.setIcon(SwingUtils.getIcon("/icons/smiley_start.png", new Dimension(60, 60)));
         generateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 generateButtonActionPerformed(evt);
@@ -138,55 +136,44 @@ public class JMSMain extends javax.swing.JFrame {
         });
         jPanel3.add(generateButton);
 
-        jButton2.setBackground(new Color(0, 0, 0));
-        jButton2.setForeground(new Color(255, 51, 51));
-        jButton2.setText("00:00");
-        jButton2.setEnabled(false);
-        jButton2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton1.setBackground(new Color(0, 0, 0));
-        jButton1.setForeground(new Color(255, 51, 51));
-        jButton1.setText("0000");
-        jButton1.setEnabled(false);
-        jButton1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jLabel2.setText("Flags left:");
 
         jLabel1.setText("Elapsed time:");
 
-        jLabel2.setText("Mines left:");
+        timeCounter.setBackground(new Color(0, 0, 0));
+        timeCounter.setForeground(new Color(255, 0, 0));
+        timeCounter.setFocusPainted(false);
+        timeCounter.setLabel("00:00");
+        timeCounter.setOpaque(false);
+
+        flagCounter.setBackground(new Color(0, 0, 0));
+        flagCounter.setForeground(new Color(255, 0, 0));
+        flagCounter.setText("0000");
+        flagCounter.setFocusPainted(false);
+        flagCounter.setOpaque(false);
 
         GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(0, 119, Short.MAX_VALUE)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2))
-                    .addGroup(GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jLabel1, GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                    .addComponent(timeCounter)
+                    .addComponent(flagCounter)))
         );
         jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                    .addComponent(timeCounter)
                     .addComponent(jLabel1))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel2))
-                .addContainerGap())
+                .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                    .addComponent(flagCounter)
+                    .addComponent(jLabel2)))
         );
 
         jLabel12.setText("Mine population:");
@@ -202,23 +189,6 @@ public class JMSMain extends javax.swing.JFrame {
 
         popLabel.setText("20%");
         popLabel.setText(String.valueOf(popSlider.getValue()) + "%");
-
-        flagCounterLabel.setBackground(new Color(0, 0, 0));
-        flagCounterLabel.setForeground(new Color(255, 0, 0));
-        flagCounterLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        flagCounterLabel.setText("0000");
-        flagCounterLabel.setAlignmentY(0.0F);
-        flagCounterLabel.setBorder(new LineBorder(new Color(0, 0, 0), 3, true));
-        flagCounterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-        flagCounterLabel.setOpaque(true);
-
-        timeLabel.setBackground(new Color(0, 0, 0));
-        timeLabel.setForeground(new Color(255, 0, 0));
-        timeLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        timeLabel.setText("00:00");
-        timeLabel.setBorder(new LineBorder(new Color(0, 0, 0), 3, true));
-        timeLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-        timeLabel.setOpaque(true);
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -250,48 +220,35 @@ public class JMSMain extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(flagCounterLabel)
-                    .addComponent(timeLabel))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                    .addComponent(xSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8)
-                                    .addComponent(xLabel))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                                    .addComponent(jLabel9)
-                                    .addComponent(ySlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(yLabel)))
-                            .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                            .addComponent(xSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8)
+                            .addComponent(xLabel))
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                            .addComponent(jLabel12)
-                            .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(popLabel)))
-                    .addComponent(jPanel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(flagCounterLabel)
+                            .addComponent(jLabel9)
+                            .addComponent(ySlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(yLabel)))
+                    .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(timeLabel)
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                    .addComponent(jLabel12)
+                    .addComponent(popSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(popLabel)))
+            .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         );
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 721, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -302,7 +259,7 @@ public class JMSMain extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -310,6 +267,7 @@ public class JMSMain extends javax.swing.JFrame {
 
     private void generateButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         Component[] children = minefieldContainer.getComponents();
+        generateButton.setIcon(SwingUtils.getIcon("/icons/smiley_start.png", new Dimension(60, 60)));
         if (children != null) {
             minefieldContainer.removeAll();
             minefieldContainer.repaint();
@@ -318,6 +276,7 @@ public class JMSMain extends javax.swing.JFrame {
         minefieldContainer.add(Box.createHorizontalGlue());
         minefieldContainer.add(minefieldPanel);
         minefieldContainer.add(Box.createHorizontalGlue());
+        stopWatch.restart();
         pack();
     }//GEN-LAST:event_generateButtonActionPerformed
 
@@ -347,14 +306,6 @@ public class JMSMain extends javax.swing.JFrame {
         }
         setFlagCounterText(getMineCount());
     }//GEN-LAST:event_xSliderStateChanged
-
-    private void jButton1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -388,10 +339,8 @@ public class JMSMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JLabel flagCounterLabel;
+    private JButton flagCounter;
     private JButton generateButton;
-    private JButton jButton1;
-    private JButton jButton2;
     private JLabel jLabel1;
     private JLabel jLabel12;
     private JLabel jLabel2;
@@ -406,7 +355,7 @@ public class JMSMain extends javax.swing.JFrame {
     private JPanel minefieldContainer;
     private JLabel popLabel;
     private JSlider popSlider;
-    private JLabel timeLabel;
+    private JButton timeCounter;
     private JLabel xLabel;
     private JSlider xSlider;
     private JLabel yLabel;
@@ -414,29 +363,20 @@ public class JMSMain extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private static final GameState GAME_STATE = GameState.getInstance();
-    private Timer timer;
+    private StopWatch stopWatch;
 
     private void additionalInit() {
-//        UIDefaults overrides = new UIDefaults();
-//        overrides.put("Button[Disabled].backgroundPainter", new ButtonPainter(null, 7));
-//        jButton1.putClientProperty("Nimbus.Overrides", overrides);
-//        jButton1.putClientProperty("Nimbus.Overrides.InheritDefaults", Boolean.TRUE);
-//        SwingUtilities.updateComponentTreeUI(jButton1);
-//
-//        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-//        defaults.put("Button[Disabled].backgroundPainter", new ButtonPainter(null, 7));
-//        SwingUtilities.updateComponentTreeUI(jButton1);
-
         setFlagCounterText(getMineCount());
 
         try {
-            final Font font = SwingUtils.getFont("/fonts/Digital Dismay.otf", Font.PLAIN, 32);
-            jButton1.setFont(font);
-            flagCounterLabel.setFont(font);
-            timeLabel.setFont(font);
+            final Font font = SwingUtils.getFont("/fonts/Digital Dismay.ttf", Font.PLAIN, 32);
+            timeCounter.setFont(font);
+            flagCounter.setFont(font);
         } catch (FontFormatException | IOException e) {
             LOG.warn("Unable to initialize font for counters. Fallback to default", e);
         }
+
+        stopWatch = new StopWatch(1000, new StopWatchListener(timeCounter));
 
         SwingUtils.centerOnScreen(this);
         GAME_STATE.addGameStateChangedListener(new GameStateChangedListener() {
@@ -447,26 +387,25 @@ public class JMSMain extends javax.swing.JFrame {
 
             @Override
             public void win(GameStateChangedEvent evt) {
+                stopWatch.stop();
                 LOG.info("WIN!!!");
-                JOptionPane.showMessageDialog(JMSMain.this, "WIN!!!");
+                generateButton.setIcon(SwingUtils.getIcon("/icons/smiley_win.png", new Dimension(60, 60)));
             }
 
             @Override
             public void lose(GameStateChangedEvent evt) {
+                stopWatch.stop();
                 LOG.info("GAME OVER!!!");
-                JOptionPane.showMessageDialog(JMSMain.this, "GAME OVER!!!");
+                generateButton.setIcon(SwingUtils.getIcon("/icons/smiley_game_over.png", new Dimension(60, 60)));
             }
 
         });
-
-        timer = new StopWatch(1000, timeLabel);
-        timer.stop();
         pack();
     }
 
     private void setFlagCounterText(int remainingFlagCount) {
         String value = String.format("%04d", remainingFlagCount);
-        setLabelValue(flagCounterLabel, value);
+        flagCounter.setText(value);
     }
 
     private void setLabelValue(JLabel label, String value) {

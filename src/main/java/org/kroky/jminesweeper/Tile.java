@@ -5,7 +5,6 @@
  */
 package org.kroky.jminesweeper;
 
-import org.kroky.jminesweeper.utils.Colors;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -26,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import org.kroky.commons.utils.SwingUtils;
 import org.kroky.jminesweeper.events.TileActionEvent;
 import org.kroky.jminesweeper.events.TileActionListener;
+import org.kroky.jminesweeper.utils.Colors;
 
 /**
  *
@@ -213,6 +213,12 @@ public class Tile extends JLabel {
             this.setIcon(SwingUtils.getIcon("/icons/mine_wrong.png", new Dimension(18, 18)));
         } else if (!isFlagged() && isTrapped() && !isRevealed()) {
             this.setIcon(SwingUtils.getIcon("/icons/mine.png", new Dimension(18, 18)));
+        }
+    }
+
+    public void setWinIcon() {
+        if (!isFlagged() && isTrapped()) {
+            this.setIcon(SwingUtils.getIcon("/icons/flag.png", new Dimension(18, 18)));
         }
     }
 }

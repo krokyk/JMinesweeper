@@ -13,8 +13,6 @@ import java.util.Set;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.kroky.jminesweeper.events.GameStateChangedEvent;
-import org.kroky.jminesweeper.events.GameStateChangedListener;
 
 /**
  *
@@ -50,24 +48,6 @@ public class MinefieldPanel extends javax.swing.JPanel {
         Tile[][] tiles = initTiles(xSize, ySize);
         placeMinesToTiles(tiles, mineCount);
         placeTilesToPanel(tiles);
-        GAME_STATE.addGameStateChangedListener(new GameStateChangedListener() {
-            @Override
-            public void gameStateChange(GameStateChangedEvent evt) {
-                //noop
-            }
-
-            @Override
-            public void win(GameStateChangedEvent evt) {
-                //noop
-            }
-
-            @Override
-            public void lose(GameStateChangedEvent evt) {
-                //reveal all
-
-            }
-
-        });
         GameState.getInstance().init(tiles);
     }
 
@@ -85,14 +65,14 @@ public class MinefieldPanel extends javax.swing.JPanel {
     private void initNeighbours(Tile[][] tiles) {
         for (int x = 0; x < tiles.length; x++) {
             for (int y = 0; y < tiles[0].length; y++) {
-                //top row
+                //top neighbours
                 tiles[x][y].addNeighbour(getTile(tiles, x - 1, y - 1));
                 tiles[x][y].addNeighbour(getTile(tiles, x, y - 1));
                 tiles[x][y].addNeighbour(getTile(tiles, x + 1, y - 1));
-                //left and right
+                //left and right neighbours
                 tiles[x][y].addNeighbour(getTile(tiles, x - 1, y));
                 tiles[x][y].addNeighbour(getTile(tiles, x + 1, y));
-                //bottom row
+                //bottom neighbours
                 tiles[x][y].addNeighbour(getTile(tiles, x - 1, y + 1));
                 tiles[x][y].addNeighbour(getTile(tiles, x, y + 1));
                 tiles[x][y].addNeighbour(getTile(tiles, x + 1, y + 1));
