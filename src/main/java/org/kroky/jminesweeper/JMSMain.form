@@ -99,6 +99,7 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="generateButton">
               <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="Generate the new minefield based on size and mine density values"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[82, 82]"/>
                 </Property>
@@ -124,7 +125,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace pref="162" max="32767" attributes="0"/>
+                      <EmptySpace pref="166" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel1" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -172,8 +173,8 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="ff" type="rgb"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="00:00"/>
                 <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="label" type="java.lang.String" value="00:00"/>
                 <Property name="opaque" type="boolean" value="false"/>
               </Properties>
             </Component>
@@ -269,26 +270,30 @@
             <Component class="javax.swing.JLabel" name="yLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="20"/>
+                <Property name="toolTipText" type="java.lang.String" value="Vertical minefield size"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel12">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Mine population:"/>
+                <Property name="text" type="java.lang.String" value="Mine density:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="xLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="20"/>
+                <Property name="toolTipText" type="java.lang.String" value="Horizontal minefield size"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="popLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="20%"/>
+                <Property name="toolTipText" type="java.lang.String" value="Mine density in %"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JSlider" name="ySlider">
               <Properties>
                 <Property name="minimum" type="int" value="10"/>
+                <Property name="toolTipText" type="java.lang.String" value="Vertical minefield size"/>
                 <Property name="value" type="int" value="20"/>
               </Properties>
               <Events>
@@ -298,7 +303,7 @@
             <Component class="javax.swing.JSlider" name="xSlider">
               <Properties>
                 <Property name="minimum" type="int" value="10"/>
-                <Property name="toolTipText" type="java.lang.String" value=""/>
+                <Property name="toolTipText" type="java.lang.String" value="Horizontal minefield size"/>
                 <Property name="value" type="int" value="20"/>
               </Properties>
               <Events>
@@ -313,6 +318,7 @@
                   <Properties>
                     <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" value="Lock"/>
+                    <Property name="toolTipText" type="java.lang.String" value="If checked, size sliders move together"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -326,6 +332,7 @@
               <Properties>
                 <Property name="maximum" type="int" value="99"/>
                 <Property name="minimum" type="int" value="1"/>
+                <Property name="toolTipText" type="java.lang.String" value="Mine density in %"/>
                 <Property name="value" type="int" value="10"/>
               </Properties>
               <Events>

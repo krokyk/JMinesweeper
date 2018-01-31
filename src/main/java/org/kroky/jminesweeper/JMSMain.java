@@ -95,6 +95,7 @@ public class JMSMain extends javax.swing.JFrame {
 
         jPanel3.setLayout(new BoxLayout(jPanel3, BoxLayout.LINE_AXIS));
 
+        generateButton.setToolTipText("Generate the new minefield based on size and mine density values");
         generateButton.setMaximumSize(new Dimension(82, 82));
         generateButton.setMinimumSize(new Dimension(82, 82));
         generateButton.setPreferredSize(new Dimension(82, 82));
@@ -112,8 +113,8 @@ public class JMSMain extends javax.swing.JFrame {
 
         timeCounter.setBackground(new Color(0, 0, 0));
         timeCounter.setForeground(new Color(255, 0, 0));
+        timeCounter.setText("00:00");
         timeCounter.setFocusPainted(false);
-        timeCounter.setLabel("00:00");
         timeCounter.setOpaque(false);
 
         flagCounter.setBackground(new Color(0, 0, 0));
@@ -126,7 +127,7 @@ public class JMSMain extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(162, Short.MAX_VALUE)
+                .addContainerGap(166, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2, GroupLayout.Alignment.TRAILING))
@@ -149,14 +150,18 @@ public class JMSMain extends javax.swing.JFrame {
         jLabel8.setText("X:");
 
         yLabel.setText("20");
+        yLabel.setToolTipText("Vertical minefield size");
 
-        jLabel12.setText("Mine population:");
+        jLabel12.setText("Mine density:");
 
         xLabel.setText("20");
+        xLabel.setToolTipText("Horizontal minefield size");
 
         popLabel.setText("20%");
+        popLabel.setToolTipText("Mine density in %");
 
         ySlider.setMinimum(10);
+        ySlider.setToolTipText("Vertical minefield size");
         ySlider.setValue(20);
         ySlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent evt) {
@@ -165,7 +170,7 @@ public class JMSMain extends javax.swing.JFrame {
         });
 
         xSlider.setMinimum(10);
-        xSlider.setToolTipText("");
+        xSlider.setToolTipText("Horizontal minefield size");
         xSlider.setValue(20);
         xSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent evt) {
@@ -177,12 +182,14 @@ public class JMSMain extends javax.swing.JFrame {
 
         lockCheckbox.setSelected(true);
         lockCheckbox.setText("Lock");
+        lockCheckbox.setToolTipText("If checked, size sliders move together");
         jPanel2.add(lockCheckbox);
 
         jLabel9.setText("Y:");
 
         popSlider.setMaximum(99);
         popSlider.setMinimum(1);
+        popSlider.setToolTipText("Mine density in %");
         popSlider.setValue(10);
         popSlider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent evt) {
@@ -284,17 +291,14 @@ public class JMSMain extends javax.swing.JFrame {
     private void generateButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         Component[] children = minefieldContainer.getComponents();
         generateButton.setIcon(SwingUtils.getIcon("/icons/smiley_start.png", new Dimension(60, 60)));
-        LOG.info(jScrollPane2.getSize());
         if (children != null) {
             minefieldContainer.removeAll();
-            minefieldContainer.repaint();
         }
         MinefieldPanel minefieldPanel = new MinefieldPanel(getSizeX(), getSizeY(), getMineCount());
         minefieldContainer.add(Box.createHorizontalGlue());
         minefieldContainer.add(minefieldPanel);
         minefieldContainer.add(Box.createHorizontalGlue());
         stopWatch.restart();
-        pack();
     }//GEN-LAST:event_generateButtonActionPerformed
 
     private void popSliderStateChanged(ChangeEvent evt) {//GEN-FIRST:event_popSliderStateChanged

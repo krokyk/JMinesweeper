@@ -42,8 +42,6 @@ public class MinefieldPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-    private static final GameState GAME_STATE = GameState.getInstance();
-
     private void initMinefield(int xSize, int ySize, int mineCount) {
         Tile[][] tiles = initTiles(xSize, ySize);
         placeMinesToTiles(tiles, mineCount);
@@ -52,6 +50,7 @@ public class MinefieldPanel extends javax.swing.JPanel {
     }
 
     private Tile[][] initTiles(int xSize, int ySize) {
+        LOG.debug("Initializing tiles...");
         Tile[][] tiles = new Tile[xSize][ySize];
         for (int x = 0; x < xSize; x++) {
             for (int y = 0; y < ySize; y++) {
@@ -63,6 +62,7 @@ public class MinefieldPanel extends javax.swing.JPanel {
     }
 
     private void initNeighbours(Tile[][] tiles) {
+        LOG.debug("Initializing tiles' neighbours...");
         for (int x = 0; x < tiles.length; x++) {
             for (int y = 0; y < tiles[0].length; y++) {
                 //top neighbours
@@ -89,6 +89,7 @@ public class MinefieldPanel extends javax.swing.JPanel {
     }
 
     private void placeMinesToTiles(Tile[][] tiles, int mineCount) {
+        LOG.debug("Placing mines...");
         final int xSize = tiles.length;
         final int ySize = tiles[0].length;
         Random rand = new Random();
@@ -103,25 +104,15 @@ public class MinefieldPanel extends javax.swing.JPanel {
     }
 
     private void placeTilesToPanel(Tile[][] tiles) {
-        GridBagConstraints gridBagConstraints;
-
+        LOG.debug("Placing tiles...");
         this.setLayout(new GridBagLayout());
         final int xMax = tiles.length;
         final int yMax = tiles[0].length;
         for (int x = 0; x < xMax; x++) {
             for (int y = 0; y < yMax; y++) {
-                gridBagConstraints = new GridBagConstraints();
+                GridBagConstraints gridBagConstraints = new GridBagConstraints();
                 gridBagConstraints.gridx = x;
                 gridBagConstraints.gridy = y;
-//                if (x > 0 && y > 0) {
-//                    gridBagConstraints.insets = new Insets(-1, -1, 0, 0);
-//                } else if (x == 0 && y > 0) {
-//                    gridBagConstraints.insets = new Insets(-1, 0, 0, 0);
-//                } else if (x > 0 && y == 0) {
-//                    gridBagConstraints.insets = new Insets(0, -1, 0, 0);
-//                } else if (x == 0 && y == 0) {
-//                    gridBagConstraints.insets = new Insets(0, 0, 0, 0);
-//                }
                 this.add(tiles[x][y], gridBagConstraints);
             }
         }

@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -60,6 +62,7 @@ public class Tile extends JLabel {
         this.setPreferredSize(new Dimension(24, 24));
         this.setHorizontalAlignment(SwingConstants.CENTER);
         this.setVerticalAlignment(SwingConstants.CENTER);
+        this.setToolTipText(String.format("[%s,%s]", posX, posY));
         try {
             this.setFont(SwingUtils.getFont("/fonts/Cousine-Bold.ttf", Font.BOLD, 16));
         } catch (FontFormatException | IOException ex) {
@@ -67,8 +70,23 @@ public class Tile extends JLabel {
             this.setFont(new Font("Times New Roman", Font.BOLD, 16));
         }
         this.addMouseListener(new MouseAdapter() {
+            private Rectangle clickingBounds;
+
             @Override
-            public void mouseClicked(MouseEvent evt) {
+            public void mousePressed(MouseEvent evt) {
+                Rectangle tileBounds = Tile.this.getBounds();
+                clickingBounds = new Rectangle(new Point(0, 0), new Dimension(tileBounds.width, tileBounds.height));
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                final Point point = evt.getPoint();
+                if (clickingBounds.contains(point)) {
+                    click(evt);
+                }
+            }
+
+            private void click(MouseEvent evt) {
                 if (GAME_STATE.isGameFinished()) {
                     LOG.debug("Game is finished");
                     return;
